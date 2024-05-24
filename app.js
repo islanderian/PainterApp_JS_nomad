@@ -6,24 +6,23 @@ canvas.width = 800;
 canvas.height = 800;
 ctx.lineWidth = 2;
 
-const colors = [
-  "#ff3838",
-  "#ffb8b8",
-  "#c56cf0",
-  "#ff9f1a",
-  "#fff200",
-  "#32ff7e",
-  "#7efff5",
-];
-
-function onClickCanvas(e) {
-  const color = colors[Math.floor(Math.random() * colors.length)];
-  ctx.strokeStyle = color;
-
-  ctx.beginPath();
-  ctx.moveTo(0, 0);
-  ctx.lineTo(e.offsetX, e.offsetY);
-  ctx.stroke();
+let isPainting = false; // 그려지는 중인지 체크
+function onMove(e) {
+  if (isPainting) {
+    ctx.lineTo(e.offsetX, e.offsetY);
+    ctx.stroke();
+    // return;
+  }
+  ctx.moveTo(e.offsetX, e.offsetY); // 이 라인을 if 위에 먼저 쓰면 그려지지 않음!!
+}
+function startPainting(e) {
+  isPainting = true;
+}
+function canclePainting(e) {
+  isPainting = false;
 }
 
-canvas.addEventListener("mousemove", onClickCanvas);
+canvas.addEventListener("mousemove", onMove);
+canvas.addEventListener("mousedown", startPainting);
+canvas.addEventListener("mouseup", canclePainting);
+canvas.addEventListener("mouseleave", canclePainting); // 마우스가 canvas 를 떠나도 그리기 종료
