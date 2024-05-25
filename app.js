@@ -4,6 +4,7 @@ const colorOptions = Array.from(document.querySelectorAll(".color-option"));
 const modeBtn = document.querySelector("#fill-btn");
 const destroyBtn = document.querySelector("#destroy-btn");
 const eraseBtn = document.querySelector("#erase-btn");
+const fileInput = document.querySelector("#file");
 
 // canvas 생성
 const canvas = document.querySelector("canvas");
@@ -74,6 +75,17 @@ function onEraserClick(e) {
   isFilling = false;
   modeBtn.innerText = "Fill";
 }
+function onFileChange(e) {
+  const file = e.target.files[0];
+  // file 의 url 얻어오기
+  const url = URL.createObjectURL(file);
+  const image = new Image();
+  image.src = url;
+  image.onload = function () {
+    ctx.drawImage(image, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+    fileInput.value = null; // 이미지 표시 후 input에 file 비움
+  };
+}
 
 canvas.addEventListener("mousemove", onMove);
 canvas.addEventListener("mousedown", startPainting);
@@ -88,3 +100,4 @@ colorOptions.forEach((item) => item.addEventListener("click", onColorClick));
 modeBtn.addEventListener("click", onModeClick);
 destroyBtn.addEventListener("click", onDestroyClick);
 eraseBtn.addEventListener("click", onEraserClick);
+fileInput.addEventListener("change", onFileChange);
