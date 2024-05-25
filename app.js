@@ -6,6 +6,7 @@ const destroyBtn = document.querySelector("#destroy-btn");
 const eraseBtn = document.querySelector("#erase-btn");
 const fileInput = document.querySelector("#file");
 const textInput = document.querySelector("#text");
+const saveBtn = document.querySelector("#save");
 
 // canvas 생성
 const canvas = document.querySelector("canvas");
@@ -96,6 +97,14 @@ function onDoubleClick(e) {
   ctx.fillText(text, e.offsetX, e.offsetY);
   ctx.restore(); // save한 상태로 되돌리기
 }
+function onSaveClick() {
+  const url = canvas.toDataURL();
+  const a = document.createElement("a");
+  // <a href=url download="myDrawing.png" />
+  a.href = url;
+  a.download = "myDrawing.png";
+  a.click(); // a태그 클릭으로 download 실행
+}
 
 canvas.addEventListener("mousemove", onMove);
 canvas.addEventListener("mousedown", startPainting);
@@ -112,3 +121,4 @@ modeBtn.addEventListener("click", onModeClick);
 destroyBtn.addEventListener("click", onDestroyClick);
 eraseBtn.addEventListener("click", onEraserClick);
 fileInput.addEventListener("change", onFileChange);
+saveBtn.addEventListener("click", onSaveClick);
