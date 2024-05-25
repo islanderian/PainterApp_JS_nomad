@@ -5,6 +5,7 @@ const modeBtn = document.querySelector("#fill-btn");
 const destroyBtn = document.querySelector("#destroy-btn");
 const eraseBtn = document.querySelector("#erase-btn");
 const fileInput = document.querySelector("#file");
+const textInput = document.querySelector("#text");
 
 // canvas 생성
 const canvas = document.querySelector("canvas");
@@ -16,6 +17,7 @@ const CANVAS_HEIGHT = 800;
 canvas.width = CANVAS_WIDTH;
 canvas.height = CANVAS_HEIGHT;
 ctx.lineWidth = lineWidth.value; // 선 굵기 초기값
+ctx.lineCap = "round"; // 선의 끝을 둥글게
 
 let isPainting = false; // 그려지는 중인지 체크
 let isFilling = false;
@@ -86,6 +88,14 @@ function onFileChange(e) {
     fileInput.value = null; // 이미지 표시 후 input에 file 비움
   };
 }
+function onDoubleClick(e) {
+  ctx.save(); // context의 현재 상태 저장해둠
+  const text = textInput.value;
+  ctx.lineWidth = 1;
+  ctx.font = "68px serif";
+  ctx.fillText(text, e.offsetX, e.offsetY);
+  ctx.restore(); // save한 상태로 되돌리기
+}
 
 canvas.addEventListener("mousemove", onMove);
 canvas.addEventListener("mousedown", startPainting);
@@ -93,6 +103,7 @@ canvas.addEventListener("mouseup", canclePainting);
 // 마우스가 canvas 를 떠나도 그리기 종료
 canvas.addEventListener("mouseleave", canclePainting);
 canvas.addEventListener("click", onCanvasClick);
+canvas.addEventListener("dblclick", onDoubleClick);
 
 lineWidth.addEventListener("change", onLineChange);
 color.addEventListener("change", onColorChange);
