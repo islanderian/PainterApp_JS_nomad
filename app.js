@@ -6,12 +6,14 @@ const lineWidth = document.querySelector("#line-width");
 const color = document.querySelector("#color");
 // HTML 요소를 Array 로 만들어 가져오기
 const colorOptions = Array.from(document.querySelectorAll(".color-option"));
+const modeBtn = document.querySelector("#fill-btn");
 
 canvas.width = 800;
 canvas.height = 800;
 ctx.lineWidth = lineWidth.value; // 선 굵기 초기값
 
 let isPainting = false; // 그려지는 중인지 체크
+let isFilling = false;
 
 function onMove(e) {
   if (isPainting) {
@@ -29,6 +31,11 @@ function canclePainting(e) {
   isPainting = false;
   ctx.beginPath(); // 새로운 path 생성
 }
+function onCanvasClick() {
+  if (isFilling) {
+    ctx.fillRect(0, 0, 800, 800);
+  }
+}
 function onLineChange(e) {
   ctx.lineWidth = e.target.value;
 }
@@ -45,13 +52,24 @@ function onColorClick(e) {
   // 클릭한 색상을 color 인풋창에 표시하기
   color.value = colorValue;
 }
+function onModeClick() {
+  if (isFilling) {
+    isFilling = false;
+    modeBtn.innerText = "Fill";
+  } else {
+    isFilling = true;
+    modeBtn.innerText = "Draw";
+  }
+}
 
 canvas.addEventListener("mousemove", onMove);
 canvas.addEventListener("mousedown", startPainting);
 canvas.addEventListener("mouseup", canclePainting);
 // 마우스가 canvas 를 떠나도 그리기 종료
 canvas.addEventListener("mouseleave", canclePainting);
+canvas.addEventListener("click", onCanvasClick);
 
 lineWidth.addEventListener("change", onLineChange);
 color.addEventListener("change", onColorChange);
 colorOptions.forEach((item) => item.addEventListener("click", onColorClick));
+modeBtn.addEventListener("click", onModeClick);
