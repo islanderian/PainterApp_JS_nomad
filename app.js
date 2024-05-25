@@ -3,6 +3,7 @@ const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
 // canvas 사이즈 명시하기
 const lineWidth = document.querySelector("#line-width");
+const color = document.querySelector("#color");
 
 canvas.width = 800;
 canvas.height = 800;
@@ -29,6 +30,11 @@ function canclePainting(e) {
 function onLineChange(e) {
   ctx.lineWidth = e.target.value;
 }
+function onColorChange(e) {
+  console.log(e.target.value);
+  ctx.strokeStyle = e.target.value;
+  // ctx.fillStyle = e.target.value;
+}
 
 canvas.addEventListener("mousemove", onMove);
 canvas.addEventListener("mousedown", startPainting);
@@ -37,3 +43,4 @@ canvas.addEventListener("mouseup", canclePainting);
 canvas.addEventListener("mouseleave", canclePainting);
 
 lineWidth.addEventListener("change", onLineChange);
+color.addEventListener("change", onColorChange);
