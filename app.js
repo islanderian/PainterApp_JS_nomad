@@ -1,15 +1,19 @@
-const canvas = document.querySelector("canvas");
-// canvas에 그릴 브러쉬
-const ctx = canvas.getContext("2d");
-// canvas 사이즈 명시하기
-const lineWidth = document.querySelector("#line-width");
 const color = document.querySelector("#color");
 // HTML 요소를 Array 로 만들어 가져오기
 const colorOptions = Array.from(document.querySelectorAll(".color-option"));
 const modeBtn = document.querySelector("#fill-btn");
+const destroyBtn = document.querySelector("#destroy-btn");
+const eraseBtn = document.querySelector("#erase-btn");
 
-canvas.width = 800;
-canvas.height = 800;
+// canvas 생성
+const canvas = document.querySelector("canvas");
+const ctx = canvas.getContext("2d");
+const lineWidth = document.querySelector("#line-width");
+const CANVAS_WIDTH = 800;
+const CANVAS_HEIGHT = 800;
+
+canvas.width = CANVAS_WIDTH;
+canvas.height = CANVAS_HEIGHT;
 ctx.lineWidth = lineWidth.value; // 선 굵기 초기값
 
 let isPainting = false; // 그려지는 중인지 체크
@@ -19,7 +23,6 @@ function onMove(e) {
   if (isPainting) {
     ctx.lineTo(e.offsetX, e.offsetY);
     ctx.stroke();
-    // return;
   }
   // 이 라인을 if 위에 먼저 쓰면 그려지지 않음!!
   ctx.moveTo(e.offsetX, e.offsetY);
@@ -33,7 +36,7 @@ function canclePainting(e) {
 }
 function onCanvasClick() {
   if (isFilling) {
-    ctx.fillRect(0, 0, 800, 800);
+    ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
   }
 }
 function onLineChange(e) {
@@ -61,6 +64,16 @@ function onModeClick() {
     modeBtn.innerText = "Draw";
   }
 }
+// 지우기 = 흰색으로 바탕 칠하기
+function onDestroyClick() {
+  ctx.fillStyle = "white";
+  ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+}
+function onEraserClick(e) {
+  ctx.strokeStyle = "white";
+  isFilling = false;
+  modeBtn.innerText = "Fill";
+}
 
 canvas.addEventListener("mousemove", onMove);
 canvas.addEventListener("mousedown", startPainting);
@@ -73,3 +86,5 @@ lineWidth.addEventListener("change", onLineChange);
 color.addEventListener("change", onColorChange);
 colorOptions.forEach((item) => item.addEventListener("click", onColorClick));
 modeBtn.addEventListener("click", onModeClick);
+destroyBtn.addEventListener("click", onDestroyClick);
+eraseBtn.addEventListener("click", onEraserClick);
